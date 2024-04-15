@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>News Summarizer</title>
+</head>
+<body>
+    <h1>News Summarizer</h1>
+    <form action="/summarize" method="post">
+        <textarea name="news_url" rows="1" cols="50" placeholder="Paste the indonesian url link here..."></textarea><br>
+        <input type="submit" value="Summarize">
+    </form>
+    {% if news_content %}
+        <h2>News Content:</h2>
+        <p>{{ news_content }}</p>
+        <h2>Summary:</h2>
+        <p>{{ summary }}</p>
+    {% endif %}
+</body>
+</html>
