@@ -1,19 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>News Summarizer</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indonesian News Summarizer</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+    }
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        text-align: center;
+        color: #333333;
+        margin-bottom: 20px;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        resize: vertical;
+    }
+    input[type="submit"] {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+    .summary {
+        margin-top: 30px;
+    }
+    .summary h2 {
+        color: #333333;
+        margin-bottom: 10px;
+    }
+    .summary p {
+        line-height: 1.6;
+    }
+    .word-count {
+        margin-top: 20px;
+        text-align: center;
+        font-style: italic;
+        color: #666666;
+    }
+    .plot {
+        text-align: center;
+        margin-top: 30px;
+    }
+    .rouge {
+        margin-top: 20px;
+        text-align: center;
+        font-style: italic;
+        color: #666666;
+    }
+</style>
 </head>
 <body>
-    <h1>News Summarizer</h1>
-    <form action="/summarize" method="post">
-        <textarea name="news_url" rows="1" cols="50" placeholder="Paste the indonesian url link here..."></textarea><br>
-        <input type="submit" value="Summarize">
-    </form>
-    {% if news_content %}
-        <h2>News Content:</h2>
-        <p>{{ news_content }}</p>
-        <h2>Summary:</h2>
-        <p>{{ summary }}</p>
-    {% endif %}
+    <div class="container">
+        <h1>Indonesian News Summarizer</h1>
+        <form action="/summarize" method="post">
+            <textarea name="news_url" rows="1" placeholder="Paste the Indonesian URL link here..."></textarea>
+            <input type="submit" value="Summarize">
+        </form>
+        {% if news_content %}
+            <div class="summary">
+                <h2>News Content:</h2>
+                <p>{{ news_content }}</p>
+                <p class="word-count">Word Count: {{ word_count_content }}</p>
+                <h2>T5-small Summary:</h2>
+                <p>{{ summary_t5 }}</p>
+                <p class="word-count">Word Count: {{ word_count_t5 }}</p>
+                <h2>BART-large Summary:</h2>
+                <p>{{ summary_bart }}</p>
+                <p class="word-count">Word Count: {{ word_count_bart }}</p>
+            </div>
+            <div class="plot">
+                <h2>Plots:</h2>
+                <img src="{{ url_for('static', filename='plot_1.png') }}" alt="Comparison Plot" width="800">
+                <img src="{{ url_for('static', filename='plot_2.png') }}" alt="Percentage Plot" width="800">
+                <img src="{{ url_for('static', filename='plot_3.png') }}" alt="Word Count Plot" width="800">
+            </div>
+            <div class="rouge">
+                <h2>ROUGE Scores of T5-small :</h2>
+                <p>ROUGE-1: {{ rouge_scores_t5['rouge-1']['f'] }}</p>
+                <p>ROUGE-2: {{ rouge_scores_t5['rouge-2']['f'] }}</p>
+                <p>ROUGE-L: {{ rouge_scores_t5['rouge-l']['f'] }}</p>
+            </div>
+            <div class="rouge">
+                <h2>ROUGE Scores of BART-large :</h2>
+                <p>ROUGE-1: {{ rouge_scores_bart['rouge-1']['f'] }}</p>
+                <p>ROUGE-2: {{ rouge_scores_bart['rouge-2']['f'] }}</p>
+                <p>ROUGE-L: {{ rouge_scores_bart['rouge-l']['f'] }}</p>
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>
